@@ -19,7 +19,7 @@ body {
   margin-left: 0px;
   width: 15px;
   height: 20px;
-  background-color: yellow;
+  background-color: rgb(107, 248, 114);
   padding: 0;
 }
 
@@ -45,8 +45,4 @@ body {
 
 .glyphicon-remove {
   color : #CD2626
-}
-
-#sentence {
-  text-align: center;
 }

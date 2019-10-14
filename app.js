@@ -7,26 +7,56 @@ $(document).ready(function () {
     let currentSentence = sentences[sentenceIndex];
     let letterIndex = 0;
     let currentLetter = currentSentence[letterIndex];
+    let startTime = Date.now();
+    let errorCounter = 0;
 
     // appends current sentence and letter to document
     $("#sentence").text(currentSentence);
     $("#target-letter").text(currentLetter);
 
     //shows next letter to be typed on keypress and cycles to next sentence in the array
-    $("body").keypress(function() {
-        letterIndex++;
-        if (letterIndex >= currentSentence.length) {
+    $("body").keypress(function(e) {
+        if (letterIndex >= currentSentence.length -1) {
             sentenceIndex++;
+            if (sentenceIndex >= sentences.length){
+                let endDate = new Date();
+                    let endTime = endDate.getTime();
+                    let minutes = (endTime - startTime) / 60000;
+                    let wpm = Math.round(54 / minutes - 2 * errorCounter);
+                let tryAgain = confirm("You typed " + wpm + " words per minute! Would you like to try again?");
+                if (tryAgain == true) {
+                    window.location.reload();
+                } else {
+                return;
+            }
+
+            };
             currentSentence = sentences[sentenceIndex];
             letterIndex = 0;
             currentLetter = currentSentence[letterIndex];
             $("#sentence").text(currentSentence);
             $("#target-letter").text(currentLetter);
+            $('#yellow-block').css("margin-left", "0px")
+            $("#feedback").empty();
             return;
         }
+
+        
+        
+        if (e.which === currentSentence.charCodeAt(letterIndex)) {
+            $("#feedback").append("<span class = 'glyphicon glyphicon-ok'></span>"); //set OK icon
+        } else {
+            $("#feedback").append("<span class = 'glyphicon glyphicon-remove'></span>"); //set X icon
+            errorCounter++
+        }
+
+        $('#yellow-block').css("margin-left", "+=17.5px")
+
+        letterIndex++;
+
         currentLetter = currentSentence[letterIndex];
         $("#target-letter").text(currentLetter);
-
+    });
 
     //shows uppercase keyboard and hides lowercase keyboard when shift is held down
     $(upperKeys).hide();
